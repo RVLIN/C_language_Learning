@@ -1,0 +1,114 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+	int data;
+	struct node *next;
+};
+
+typedef struct node NODE;
+
+void show(NODE *);
+NODE* insertNode(NODE *, int);
+void freeList(NODE* first);
+NODE* searchNode (NODE* first, int item);
+NODE* deleteNode (NODE *,NODE *);
+NODE* createNode (int *arr, int len);
+
+int main(void)
+{
+	int arr[]={12,43,56,34};
+
+	NODE *first,*node;
+	first=createNode(arr,4);
+	show(first);
+	first=insertNode(first,53);
+	printf("After insertNode\n");
+	show(first);
+
+}
+
+void freeList(NODE* first)
+{
+	NODE* walk;
+        NODE* tmp;
+	walk=first;
+	while(walk!=NULL)
+	{
+		tmp=walk;
+		walk=walk->next;
+		free(tmp);
+	}
+}
+
+NODE* createNode(int *arr, int len)
+{
+	int i;
+	NODE *first,*previous,*walk;
+	for(i=0;i<len;i++)
+	{
+		walk=(NODE *)malloc(sizeof(NODE));
+		walk->data=arr[i];
+		if(i==0)
+			first=walk;
+		else
+			previous->next=walk;
+		walk->next=NULL;
+		previous=walk;
+	}
+	return first;
+}
+
+
+
+NODE* searchNode(NODE* first, int item)
+{
+	NODE *node=first;
+	while(node!=NULL)
+	{
+		if(node->data==item)
+			return node;
+		else
+			node=node->next;
+	}
+	return NULL;
+}
+
+NODE* deleteNode(NODE *first, NODE *node)
+{
+	NODE *ptr=first;
+	if(first==NULL)
+	{
+		printf("Nothing to delete\n");
+		return NULL;
+	}
+	if(node==first)
+		first=first->next;
+	else
+	{
+		while(ptr->next!=node)
+			ptr=ptr->next;
+		ptr->next=node->next;
+	}
+	return first;
+
+}
+NODE* insertNode(NODE *ptr, int value)
+{
+	NODE *new = ( NODE *) malloc(sizeof(NODE));
+	new->data=value;
+	new->next=ptr;
+	return new;
+}
+void show(NODE *ptr)
+{
+	while(ptr!=NULL)
+	{
+		printf("address:%p, ",ptr);
+		printf("data=%d, ",ptr->data);
+		printf("next=%p. \n",ptr->next);
+
+		ptr=ptr->next;
+	}
+}
